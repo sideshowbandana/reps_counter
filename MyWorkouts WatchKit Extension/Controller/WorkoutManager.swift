@@ -7,6 +7,7 @@ The workout manager that interfaces with HealthKit.
 
 import Foundation
 import HealthKit
+import CoreMotion
 
 class WorkoutManager: NSObject, ObservableObject {
     var selectedWorkout: HKWorkoutActivityType? {
@@ -25,8 +26,10 @@ class WorkoutManager: NSObject, ObservableObject {
     }
 
     let healthStore = HKHealthStore()
+    let motion = CMMotionManager()
     var session: HKWorkoutSession?
     var builder: HKLiveWorkoutBuilder?
+    var timer: Timer?
 
     // Start the workout.
     func startWorkout(workoutType: HKWorkoutActivityType) {
@@ -56,6 +59,7 @@ class WorkoutManager: NSObject, ObservableObject {
         session?.startActivity(with: startDate)
         builder?.beginCollection(withStart: startDate) { (success, error) in
             // The workout has started.
+            print("\(error)")
         }
     }
 
@@ -113,6 +117,7 @@ class WorkoutManager: NSObject, ObservableObject {
     @Published var activeEnergy: Double = 0
     @Published var distance: Double = 0
     @Published var workout: HKWorkout?
+    @Published var acceleration: CMAcceleration?
 
     func updateForStatistics(_ statistics: HKStatistics?) {
         guard let statistics = statistics else { return }
@@ -133,6 +138,18 @@ class WorkoutManager: NSObject, ObservableObject {
                 return
             }
         }
+    }
+    
+    
+
+    func setAcceleration() {
+       // Make sure the accelerometer hardware is available.
+       if self.motion.isAccelerometerAvailable {
+          self.motion.accelerometerUpdateInterval = 1.0 / 60.0  // 60 Hz
+          self.motion.startAccelerometerUpdates()
+
+           acceleration = self.motion.accelerometerData?.acceleration
+       }
     }
 
     func resetWorkout() {
@@ -188,6 +205,7 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
 
             // Update the published values.
             updateForStatistics(statistics)
+            setAcceleration()
         }
     }
 }
