@@ -10,7 +10,7 @@ import HealthKit
 
 struct StartView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
-    var workoutTypes: [HKWorkoutActivityType] = [.cycling, .running, .walking]
+    var workoutTypes: [HKWorkoutActivityType] = [.traditionalStrengthTraining]
 
     var body: some View {
         List(workoutTypes) { workoutType in
@@ -39,12 +39,8 @@ extension HKWorkoutActivityType: Identifiable {
 
     var name: String {
         switch self {
-        case .running:
-            return "Run"
-        case .cycling:
-            return "Bike"
-        case .walking:
-            return "Walk"
+        case .traditionalStrengthTraining:
+            return "Count Reps"
         default:
             return ""
         }

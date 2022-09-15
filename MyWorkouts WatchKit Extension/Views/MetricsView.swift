@@ -20,7 +20,7 @@ struct MetricsView: View {
                     .formatted(.measurement(width: .abbreviated, usage: .workout, numberFormatStyle: .number.precision(.fractionLength(0)))))
                 Text(workoutManager.heartRate.formatted(.number.precision(.fractionLength(0))) + " bpm")
                 // Text(Measurement(value: workoutManager.distance, unit: UnitLength.meters).formatted(.measurement(width: .abbreviated, usage: .road)))
-                Text(workoutManager.reps.formatted(.number.precision(.fractionLength(0))))
+                Text(workoutManager.reps.formatted(.number.precision(.fractionLength(0))) + " reps")
                 // AccelerometerView(acceleration: workoutManager.acceleration)
             }
             .font(.system(.title, design: .rounded).monospacedDigit().lowercaseSmallCaps())

@@ -178,6 +178,8 @@ class WorkoutManager: NSObject, ObservableObject {
                 }
             })
             
+            self.reps -= 1
+            
             // Add the timer to the current run loop.
             RunLoop.current.add(self.accelerationTimer!, forMode: RunLoop.Mode.default)
         }
@@ -186,6 +188,7 @@ class WorkoutManager: NSObject, ObservableObject {
     func stopAccelerometers(){
         if self.motion.isAccelerometerAvailable {
             self.motion.stopAccelerometerUpdates()
+            self.reps -= 1
             self.accelerationTimer?.invalidate()
         }
     }
